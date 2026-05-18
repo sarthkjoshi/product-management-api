@@ -13,28 +13,23 @@ datasource db {
 }
 
 model User {
-  userId   Int    @id @default(autoincrement())
-  name     String
-  email    String @unique
-  password String
-  role     String @default("USER")
-  products Product[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  userId    Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  role      String    @default("USER")
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
 }
 
 model Product {
   productId   Int      @id @default(autoincrement())
   productName String   @db.VarChar(191)
-  productCode String   @unique @db.VarChar(191)
   description String
-  releaseDate DateTime
   price       Decimal  @db.Decimal(10, 2)
-  rating      Float
-  imageUrl    String
-  userId Int?
-  user  User? @relation(fields: [userId] , references: [userId])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  userId      Int
+  user        User     @relation(fields: [userId], references: [userId])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

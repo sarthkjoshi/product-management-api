@@ -15,7 +15,7 @@ const authenticate = async (req, res, next) => {
     console.log("before decoded", token);
     const decoded = jwt.verify(token, JWT_SECRET);
     req.user = decoded;
-    console.log("Decoded successfully now going to next()", decoded);
+
     next();
   } catch (error) {
     return res.json({ error: "Invalid token" });

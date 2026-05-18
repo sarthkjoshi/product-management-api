@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma.js";
+import { prisma } from "../config/prisma.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
@@ -50,7 +50,7 @@ export const loginUser = async (req, res) => {
 
     const token = jwt.sign(
       {
-        userId: foundUser.id,
+        userId: foundUser.userId,
         name: foundUser.name,
         userRole: foundUser.role,
       },

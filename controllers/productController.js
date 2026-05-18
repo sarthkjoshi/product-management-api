@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma.js";
+import { prisma } from "../config/prisma.js";
 
 //Get all produts
 export const getProducts = async (req, res) => {
@@ -142,14 +142,11 @@ export const updateProductById = async (req, res) => {
 export const createProduct = async (req, res) => {
   try {
     const product = req.body;
+    console.log(product);
     if (
       !product.productName ||
-      !product.productCode ||
       !product.description ||
-      !product.releaseDate ||
-      product.price === undefined ||
-      product.rating === undefined ||
-      !product.imageUrl
+      product.price === undefined
     ) {
       return res.status(400).json({
         statusCode: 400,
@@ -158,7 +155,11 @@ export const createProduct = async (req, res) => {
         data: [],
       });
     }
-    const newProduct = await prisma.product.create({ data: product });
+    // const modifiedProduct = { ...product, userId: req.user.userId };
+    // console.log(modifiedProduct);
+    const newProduct = await prisma.product.create({
+      data: { ...product, userId: req.user.userId },
+    });
 
     return res.status(201).json({
       statusCode: 201,
@@ -171,6 +172,7 @@ export const createProduct = async (req, res) => {
       statusCode: 500,
       status: "failure",
       message: "internal server error",
+      error: error.message,
       data: [],
     });
   }
