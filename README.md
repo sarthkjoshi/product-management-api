@@ -20,4 +20,4 @@
 
 ## API Testing
 
-- Postman
+- Postman is used
