@@ -1,8 +1,9 @@
 import { prisma } from "../lib/prisma.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import "dotenv/config";
 
-const JWT_SECRET = "ssr344@lkkk";
+const JWT_SECRET = process.env["JWT_SECRET"];
 
 export const resgisterUser = async (req, res) => {
   const { name, email, password, role } = req.body;
@@ -56,7 +57,7 @@ export const loginUser = async (req, res) => {
       JWT_SECRET,
       { expiresIn: "1h" },
     );
-    return res.json(token);
+    return res.json({ token });
   } catch (error) {
     return res
       .status(500)
