@@ -57,7 +57,7 @@ export const loginUser = async (req, res) => {
       JWT_SECRET,
       { expiresIn: "1h" },
     );
-    return res.json({ token });
+    return res.json({ token: `Bearer ${token}` });
   } catch (error) {
     return res
       .status(500)

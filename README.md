@@ -61,7 +61,6 @@ Product fields:
 - name
 - description
 - price
-- stock quantity
 
 Routes:
 GET /products
@@ -117,13 +116,6 @@ Example:
 GET /products?page=1&limit=10
 
 ====================================================
-
-6. Inventory Management
-
----
-
-- Track stock quantity
-- Update stock when products change
 
 ====================================================
 DATABASE DESIGN
