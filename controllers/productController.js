@@ -142,11 +142,12 @@ export const updateProductById = async (req, res) => {
 export const createProduct = async (req, res) => {
   try {
     const product = req.body;
-    console.log(product);
+
     if (
       !product.productName ||
       !product.description ||
-      product.price === undefined
+      product.price === undefined ||
+      product.categoryId === undefined
     ) {
       return res.status(400).json({
         statusCode: 400,
@@ -155,10 +156,15 @@ export const createProduct = async (req, res) => {
         data: [],
       });
     }
-    // const modifiedProduct = { ...product, userId: req.user.userId };
-    // console.log(modifiedProduct);
+    console.log(req.user.userId);
     const newProduct = await prisma.product.create({
-      data: { ...product, userId: req.user.userId },
+      data: {
+        productName: product.productName,
+        description: product.description,
+        price: product.price,
+        userId: req.user.userId,
+        categoryId: product.categoryId,
+      },
     });
 
     return res.status(201).json({

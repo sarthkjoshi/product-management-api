@@ -7,7 +7,9 @@ const authenticate = async (req, res, next) => {
   const header = req.headers.authorization;
 
   if (!header) {
-    return res.status(401).json({ error: "Token missing" });
+    return res
+      .status(401)
+      .json({ error: "You are not authenticated: Token missing" });
   }
 
   try {

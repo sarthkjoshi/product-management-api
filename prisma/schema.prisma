@@ -40,10 +40,7 @@ model Product {
 model Category{
 categoryId Int @id @default(autoincrement())
 categoryName String @db.VarChar(191)
-
-
 products Product[]
-
 createdAt   DateTime @default(now())
 updatedAt   DateTime @updatedAt
 }
