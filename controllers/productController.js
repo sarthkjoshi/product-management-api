@@ -1,9 +1,28 @@
 import { prisma } from "../config/prisma.js";
-
+import redis from "../config/redis.js";
 //Get all produts
 export const getProducts = async (req, res) => {
   try {
+    // 1. Check cache
+    const cachedProducts = await redis.get("products");
+
+    if (cachedProducts) {
+      console.log("Serving from Redis cache");
+
+      return res.status(200).json({
+        source: "cache",
+        data: JSON.parse(cachedProducts),
+      });
+    }
+
+    // 2. Fetch from database
+    console.log("Fetching from database");
+
     const products = await prisma.product.findMany();
+
+    // 3. Store in Redis
+    await redis.set("products", JSON.stringify(products), "EX", 3600);
+
     if (products.length === 0) {
       return res.status(200).json({
         statusCode: 200,
@@ -87,7 +106,8 @@ export const deleteProductById = async (req, res) => {
     const deletedProduct = await prisma.product.delete({
       where: { productId: id },
     });
-
+    // clear old cache
+    await redis.del("products");
     return res.status(200).json({
       statusCode: 200,
       status: "success",
@@ -122,6 +142,8 @@ export const updateProductById = async (req, res) => {
       where: { productId: id },
       data: { ...req.body },
     });
+    // clear old cache
+    await redis.del("products");
     return res.status(200).json({
       statusCode: 200,
       status: "success",
@@ -166,7 +188,8 @@ export const createProduct = async (req, res) => {
         categoryId: product.categoryId,
       },
     });
-
+    // clear old cache
+    await redis.del("products");
     return res.status(201).json({
       statusCode: 201,
       message: "product data added successfully",
